@@ -14,7 +14,9 @@ class States(object):
         self.next = None
         self.quit = False
         self.previous = None
-  
+        self.level = Level()
+
+
 class Menu(States):
     def __init__(self):
         States.__init__(self)
@@ -32,7 +34,7 @@ class Menu(States):
         self.draw(screen)
     def draw(self, screen):
         screen.fill((255,0,0))
-  
+
 class Game(States):
     def __init__(self):
         States.__init__(self)
@@ -41,6 +43,7 @@ class Game(States):
         print('cleaning up Game state stuff')
     def startup(self):
         print('starting Game state stuff')
+        self.level.run()
     def get_event(self, event):
         if event.type == pg.KEYDOWN:
             print('Game State keydown')
@@ -50,7 +53,28 @@ class Game(States):
         self.draw(screen)
     def draw(self, screen):
         screen.fill((0,0,255))
-  
+
+
+class Pause(States):
+    def __init__(self):
+        States.__init__(self)
+        self.next = 'game'
+        self.fps = 0
+    def get_event(self, event):
+        if event.type == pg.KEYDOWN:
+            print('Game State keydown')
+        elif event.type == pg.MOUSEBUTTONDOWN:
+            self.done = True
+    def cleanup(self):
+        print('cleaning up Pause state stuff')
+    def startup(self):
+        print('starting Pause state stuff')
+        self.level.run()
+    def update(self, screen, dt):
+        self.draw(screen)
+    def draw(self, screen):
+        screen.fill('black')
+
 class Control:
     def __init__(self, **settings):
         self.__dict__.update(settings)
@@ -85,13 +109,12 @@ class Control:
             self.event_loop()
             self.update(delta_time)
             pg.display.update()
-  
-  
+
 settings = {
     'size':(600,400),
     'fps' :60
 }
-  
+
 app = Control(**settings)
 state_dict = {
     'menu': Menu(),
@@ -101,17 +124,3 @@ app.setup_states(state_dict, 'menu')
 app.main_game_loop()
 pg.quit()
 sys.exit()
-
-
-
-
-#GAME
-#LEVEL
-
-class Level:
-    def __init__(self):
-        self.visible_sprites = pg.sprite.Group()
-        self.obstacles_sprites = pg.sprite.Group()
-
-    def run(self):
-        pass
