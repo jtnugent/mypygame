@@ -1,6 +1,8 @@
 import pygame as pg
 import sys
+from level import Level
 
+#SETTINGS AND GAMELOOP/PAUSESTATE
 pg.init()
 screen = pg.display.set_mode((800,400))
 pg.display.set_caption('BossBattle')
@@ -99,3 +101,17 @@ app.setup_states(state_dict, 'menu')
 app.main_game_loop()
 pg.quit()
 sys.exit()
+
+
+
+
+#GAME
+#LEVEL
+
+class Level:
+    def __init__(self):
+        self.visible_sprites = pg.sprite.Group()
+        self.obstacles_sprites = pg.sprite.Group()
+
+    def run(self):
+        pass
