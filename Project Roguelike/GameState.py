@@ -14,7 +14,7 @@ class States(object):
         self.next = None
         self.quit = False
         self.previous = None
-  
+
 class Menu(States):
     def __init__(self):
         States.__init__(self)
@@ -32,7 +32,7 @@ class Menu(States):
         self.draw(screen)
     def draw(self, screen):
         screen.fill((255,0,0))
-  
+
 class Game(States):
     def __init__(self):
         States.__init__(self)
@@ -50,7 +50,7 @@ class Game(States):
         self.draw(screen)
     def draw(self, screen):
         screen.fill((0,0,255))
-  
+
 class Control:
     def __init__(self, **settings):
         self.__dict__.update(settings)
@@ -85,13 +85,13 @@ class Control:
             self.event_loop()
             self.update(delta_time)
             pg.display.update()
-  
-  
+
+
 settings = {
     'size':(600,400),
     'fps' :60
 }
-  
+
 app = Control(**settings)
 state_dict = {
     'menu': Menu(),
