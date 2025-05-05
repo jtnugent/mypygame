@@ -1,15 +1,20 @@
 import pygame as pg
 import sys
-from GameState import WIDTH, HEIGHT, win
 
+pg.init()
+WIDTH, HEIGHT = 400 , 400
+TITLE = "Meh"
+win = pg.display.set_mode((WIDTH, HEIGHT))
+pg.display.set_caption(TITLE)
+clock = pg.time.Clock()
 
 
 
 class Player():
     def __init__(self, x, y):
         self.rect = pg.Rect(x, y, 32, 32)
-        self.x = x
-        self.y = y
+        self.x = int(x)
+        self.y = int(y)
         self.color = (250, 120, 60)
         self.velX = 0
         self.velY = 0
@@ -17,10 +22,10 @@ class Player():
         self.right_pressed = False
         self.up_pressed = False
         self.down_pressed = False
-        self.speed = 4
+        self.speed = 3
 
     def draw(self,win):
-        pg.draw.rect(win, (self.color, self.rect))
+        pg.draw.rect(win, self.color, self.rect)
 
     def update(self):
         self.velX = 0
@@ -31,18 +36,22 @@ class Player():
             self.velX = self.speed
         if self.up_pressed and not self.down_pressed:
             self.velY = -self.speed
-            if self.down_pressed and not self.up_pressed:
-                self.Y = self.speed
+        if self.down_pressed and not self.up_pressed:
+            self.velY = self.speed
 
         self.x += self.velX
         self.y += self.velY
 
-        self.rect = pg.Rect(self.x, self.y, 32, 32)
+        self.rect = pg.Rect(int(self.x), int(self.y), 32, 32)
 
 player = Player(WIDTH/2, HEIGHT/2)
 
 while True:
+
     for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            sys.exit( )
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
                 player.left_pressed = True
@@ -69,4 +78,4 @@ while True:
     #update
     player.update()
     pg.display.flip()
-
+    clock.tick(120)
