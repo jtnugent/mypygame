@@ -3,8 +3,10 @@ import sys
 from level import Level
 
 #SETTINGS AND GAMELOOP/PAUSESTATE
+
 pg.init()
-screen = pg.display.set_mode((800,400))
+WIDTH, HEIGHT = 800,400
+win = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption('BossBattle')
 clock = pg.time.Clock()
 
@@ -28,10 +30,10 @@ class Menu(States):
             print('Menu State keydown')
         elif event.type == pg.MOUSEBUTTONDOWN:
             self.done = True
-    def update(self, screen, dt):
-        self.draw(screen)
-    def draw(self, screen):
-        screen.fill((255,0,0))
+    def update(self, win, dt):
+        self.draw(win)
+    def draw(self, win):
+        win.fill((255,0,0))
 
 class Game(States):
     def __init__(self):
@@ -41,22 +43,22 @@ class Game(States):
         print('cleaning up Game state stuff')
     def startup(self):
         print('starting Game state stuff')
-        self.level.run()
+        Level.run(self)
     def get_event(self, event):
         if event.type == pg.KEYDOWN:
             print('Game State keydown')
         elif event.type == pg.MOUSEBUTTONDOWN:
             self.done = True
-    def update(self, screen, dt):
-        self.draw(screen)
-    def draw(self, screen):
-        screen.fill((0,0,255))
-  
+    def update(self, win, dt):
+        self.draw(win)
+    def draw(self, win):
+        win.fill((0,0,255))
+
 class Control:
     def __init__(self, **settings):
         self.__dict__.update(settings)
         self.done = False
-        self.screen = pg.display.set_mode(self.size)
+        self.win = pg.display.set_mode(self.size)
         self.clock = pg.time.Clock()
     def setup_states(self, state_dict, start_state):
         self.state_dict = state_dict
@@ -74,7 +76,7 @@ class Control:
             self.done = True
         elif self.state.done:
             self.flip_state()
-        self.state.update(self.screen, dt)
+        self.state.update(self.win, dt)
     def event_loop(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -86,8 +88,72 @@ class Control:
             self.event_loop()
             self.update(delta_time)
             pg.display.update()
+
+class Player():
+    def __init__(self, x, y):
+        self.rect = pg.Rect(x, y, 32, 32)
+        self.x = x
+        self.y = y
+        self.color = (250, 120, 60)
+        self.velX = 0
+        self.velY = 0
+        self.left_pressed = False
+        self.right_pressed = False
+        self.up_pressed = False
+        self.down_pressed = False
+        self.speed = 4
+
+    def draw(self,win):
+        pg.draw.rect(win, (self.color, self.rect))
+
+    def update(self):
+        self.velX = 0
+        self.velY = 0
+        if self.left_pressed and not self.right_pressed:
+            self.velX = -self.speed
+        if self.right_pressed and not self.left_pressed:
+            self.velX = self.speed
+        if self.up_pressed and not self.down_pressed:
+            self.velY = -self.speed
+            if self.down_pressed and not self.up_pressed:
+                self.Y = self.speed
+
+        self.x += self.velX
+        self.y += self.velY
+
+        self.rect = pg.Rect(self.x, self.y, 32, 32)
+
+player = Player(200, 200)
+
+while True:
+    for event in pg.event.get():
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_LEFT:
+                player.left_pressed = True
+            if event.key == pg.K_RIGHT:
+                player.right_pressed = True
+            if event.key == pg.K_UP:
+                player.up_pressed = True
+            if event.key == pg.K_DOWN:
+                player.down_pressed = True
+        if event.type == pg.KEYUP:
+            if event.key == pg.K_LEFT:
+                player.left_pressed = False
+            if event.key == pg.K_RIGHT:
+                player.right_pressed = False
+            if event.key == pg.K_UP:
+                player.up_pressed = False
+            if event.key == pg.K_DOWN:
+                player.down_pressed = False
+
+
+win.fill((12, 24, 36))
+player.draw(win)
+
+player.update()
+pg.display.flip()
   
-  
+
 settings = {
     'size':(600,400),
     'fps' :60
