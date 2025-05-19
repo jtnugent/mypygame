@@ -2,12 +2,13 @@ import pygame as pg
 import sys
 from level import Level
 from tile import Tile
+from settings import *
 
 
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = pg.display.set_mode((WIDTH, HIEGHT))
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption('Game')
         self.clock = pg.time.Clock
 
