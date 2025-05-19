@@ -12,7 +12,7 @@ clock = pg.time.Clock()
 
 
 
-class Player:
+class Player(pg.sprite.Sprite):
     def __init__(self, x, y):
         velX = 0
         velY = 0
@@ -45,26 +45,27 @@ class Player:
             if self.down_pressed and not self.up_pressed:
                 self.velY = self.speed
 
+
+
             self.x += self.velX
             self.y += self.velY
 
             self.rect = pg.Rect(int(self.x), int(self.y), 32, 32)
 
     def dash(self):
+        print("dash detected")
         dash_pressed = True
         self.velX = 0
         self.dash_pressed = dash_pressed
         for i in range(50):
-            if last_key_pressed == "left":
-                #Draw
-                win.fill((12, 24, 36))
-                player.draw(win)
+            #Draw
+            win.fill((12, 24, 36))
+            player.draw(win)
 
-                #update
-                player.update()
-                pg.display.flip()
-                clock.tick(120)
-                self.velX = -4
+            #update
+            player.update()
+            pg.display.flip()
+            clock.tick(400)
         self.dash_pressed = False
         self.velX = 0
         self.velY = 0
