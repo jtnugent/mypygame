@@ -4,8 +4,6 @@ import time
 
 
 pg.init()
-WIDTH, HEIGHT = 400 , 400
-TITLE = "Meh"
 win = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption(TITLE)
 clock = pg.time.Clock()
@@ -81,9 +79,6 @@ p = Player(0,0)
 while True:
 
     for event in pg.event.get():
-        if event.type == pg.QUIT:
-            pg.quit()
-            sys.exit( )
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
                 player.left_pressed = True
@@ -113,7 +108,6 @@ while True:
         
 
     #Draw
-    win.fill((12, 24, 36))
     player.draw(win)
 
     #update

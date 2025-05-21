@@ -10,7 +10,7 @@ class Game:
         pg.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption('Game')
-        self.clock = pg.time.Clock
+        self.clock = pg.time.Clock()
 
         self.level = Level()
 
@@ -21,6 +21,7 @@ class Game:
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
+
             self.screen.fill('black')
             self.level.run()
             pg.display.update()
@@ -28,5 +29,5 @@ class Game:
 
 if __name__ == '__main__':
     game = Game()
-    game.run
+    game.run()
 
